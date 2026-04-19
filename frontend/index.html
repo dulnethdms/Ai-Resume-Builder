@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ResumeCraft – ATS-Friendly CV Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Create modern, ATS-friendly resumes in minutes with ResumeCraft." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body class="site-shell min-h-screen flex flex-col">
+  <header class="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+    <nav class="w-full px-4 sm:px-6 lg:px-10 flex items-center justify-between py-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="text-xl font-semibold tracking-tight text-slate-900">ResumeCraft</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <a href="login.html" class="text-sm text-slate-600 hover:text-slate-900">Login</a>
+        <a href="signup.html" class="px-4 py-2 rounded-md bg-indigo-600 text-sm font-medium text-white shadow-sm hover:bg-indigo-500">
+          Get Started
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1">
+    <section class="w-full px-4 sm:px-6 lg:px-10 py-12 grid md:grid-cols-2 gap-10 items-center">
+      <article>
+        <p class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 mb-4">
+          ATS-friendly resume builder
+        </p>
+        <h1 class="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
+          Build HR-approved, ATS-friendly resumes in minutes.
+        </h1>
+        <p class="text-slate-600 mb-6 max-w-xl">
+          Guided resume wizard, real-time preview, and professional templates designed with hiring managers in mind.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="signup.html" class="px-5 py-2.5 rounded-md bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            Start building your CV
+          </a>
+          <a href="#features" class="text-sm text-slate-600 hover:text-slate-900">
+            View features
+          </a>
+        </div>
+      </article>
+
+      <aside class="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <!-- Fake preview card -->
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-900">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 rounded-full bg-slate-200"></div>
+            <div>
+              <p class="font-semibold text-sm">Alex Johnson</p>
+              <p class="text-xs text-slate-500">Full Stack Engineer</p>
+            </div>
+          </div>
+          <div class="h-1 w-16 rounded mb-2 bg-indigo-600"></div>
+          <p class="text-xs text-slate-600 line-clamp-3">
+            Experienced engineer with a focus on building scalable, user-centric web applications…
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="features" class="border-t border-slate-200 bg-slate-50/80">
+      <div class="w-full px-4 sm:px-6 lg:px-10 py-10 grid md:grid-cols-3 gap-6">
+        <article class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+          <h2 class="font-semibold mb-2 text-sm text-slate-900">ATS-Friendly Templates</h2>
+          <p class="text-xs text-slate-600">
+            Clean layouts, structured sections, and typography that passes ATS parsing.
+          </p>
+        </article>
+        <article class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+          <h2 class="font-semibold mb-2 text-sm text-slate-900">Real-time Preview</h2>
+          <p class="text-xs text-slate-600">
+            See your resume update instantly as you type and switch templates.
+          </p>
+        </article>
+        <article class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+          <h2 class="font-semibold mb-2 text-sm text-slate-900">AI Assistance</h2>
+          <p class="text-xs text-slate-600">
+            Generate summaries, suggested skills, and ATS scores with one click.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-500 bg-white">
+    © <span id="year"></span> ResumeCraft. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
