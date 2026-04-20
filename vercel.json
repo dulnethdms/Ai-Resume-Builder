@@ -1,14 +1,22 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    { "source": "/", "destination": "/frontend/index.html" },
-    { "source": "/index.html", "destination": "/frontend/index.html" },
-    { "source": "/login.html", "destination": "/frontend/login.html" },
-    { "source": "/signup.html", "destination": "/frontend/signup.html" },
-    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
-    { "source": "/create-cv.html", "destination": "/frontend/create-cv.html" },
-    { "source": "/404.html", "destination": "/frontend/404.html" },
-    { "source": "/favicon.ico", "destination": "/frontend/favicon.ico" },
-    { "source": "/assets/(.*)", "destination": "/frontend/assets/$1" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/backend/api/index.js" },
+    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/index.html", "dest": "/frontend/index.html" },
+    { "src": "/login.html", "dest": "/frontend/login.html" },
+    { "src": "/signup.html", "dest": "/frontend/signup.html" },
+    { "src": "/dashboard.html", "dest": "/frontend/dashboard.html" },
+    { "src": "/create-cv.html", "dest": "/frontend/create-cv.html" },
+    { "src": "/404.html", "dest": "/frontend/404.html" },
+    { "src": "/favicon.ico", "dest": "/frontend/favicon.ico" },
+    { "src": "/assets/(.*)", "dest": "/frontend/assets/$1" }
   ]
 }

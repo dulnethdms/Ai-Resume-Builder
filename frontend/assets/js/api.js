@@ -1,7 +1,22 @@
-const API_BASE =
-  window.API_BASE ||
-  localStorage.getItem('API_BASE') ||
-  'http://localhost:5000/api';
+function resolveApiBase() {
+  if (window.API_BASE) return window.API_BASE;
+
+  const storedApiBase = localStorage.getItem('API_BASE');
+  if (storedApiBase) return storedApiBase;
+
+  const { hostname, origin } = window.location;
+  const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+  // Keep local frontend -> local backend behavior for dev convenience.
+  if (isLocalHost) {
+    return `http://${hostname}:5000/api`;
+  }
+
+  // In deployed environments, default to same-origin API.
+  return `${origin}/api`;
+}
+
+const API_BASE = resolveApiBase();
 
 function getToken() {
   return localStorage.getItem('token');
