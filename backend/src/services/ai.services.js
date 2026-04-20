@@ -1,4 +1,3 @@
-// backend/src/services/ai.service.js
 async function generateSummary(profileData) {
   // Call external LLM here; for now, mock:
   return `Experienced ${profileData.role || 'professional'} with a strong background in ${
@@ -28,4 +27,4 @@ async function improveGrammar(text) {
   return text;
 }
 
-module.exports = { generateSummary, suggestSkills, scoreResumeForATS, improveGrammar };
+export { generateSummary, suggestSkills, scoreResumeForATS, improveGrammar };

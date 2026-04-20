@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 72" role="img" aria-label="Google logo">
+  <rect width="240" height="72" rx="16" fill="#ffffff"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="24" letter-spacing="-0.5">
+    <text x="24" y="46" fill="#4285F4">G</text>
+    <text x="43" y="46" fill="#EA4335">o</text>
+    <text x="60" y="46" fill="#FBBC05">o</text>
+    <text x="77" y="46" fill="#4285F4">g</text>
+    <text x="94" y="46" fill="#34A853">l</text>
+    <text x="106" y="46" fill="#EA4335">e</text>
+  </g>
+</svg>

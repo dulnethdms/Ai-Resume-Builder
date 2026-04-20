@@ -7,7 +7,7 @@ const resumeSchema = new mongoose.Schema(
     title: { type: String, default: 'My Resume' },
     template: {
       type: String,
-      enum: ['modern', 'minimal', 'creative', 'corporate', 'executive', 'classic'],
+      enum: ['modern', 'minimal', 'creative', 'corporate', 'executive', 'classic', 'sidebar-pro'],
       default: 'modern',
     },
     theme: {
