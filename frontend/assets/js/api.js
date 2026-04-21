@@ -2,10 +2,24 @@ function resolveApiBase() {
   if (window.API_BASE) return window.API_BASE;
 
   const storedApiBase = localStorage.getItem('API_BASE');
-  if (storedApiBase) return storedApiBase;
-
   const { hostname, origin } = window.location;
   const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+  if (storedApiBase) {
+    try {
+      const parsed = new URL(storedApiBase);
+      const storedIsLocal = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+
+      // Ignore stale localhost API_BASE values when running on a deployed URL.
+      if (!(storedIsLocal && !isLocalHost)) {
+        return storedApiBase;
+      }
+
+      localStorage.removeItem('API_BASE');
+    } catch {
+      localStorage.removeItem('API_BASE');
+    }
+  }
 
   // Keep local frontend -> local backend behavior for dev convenience.
   if (isLocalHost) {
@@ -17,6 +31,7 @@ function resolveApiBase() {
 }
 
 const API_BASE = resolveApiBase();
+const SAME_ORIGIN_API_BASE = `${window.location.origin}/api`;
 
 function getToken() {
   return localStorage.getItem('token');
@@ -37,10 +52,25 @@ async function apiRequest(path, options = {}) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${normalizedPath}`, {
-    ...options,
-    headers,
-  });
+  let response;
+  try {
+    response = await fetch(`${API_BASE}${normalizedPath}`, {
+      ...options,
+      headers,
+    });
+  } catch (networkError) {
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const shouldRetryWithSameOrigin = !isLocalHost && API_BASE !== SAME_ORIGIN_API_BASE;
+
+    if (!shouldRetryWithSameOrigin) {
+      throw networkError;
+    }
+
+    response = await fetch(`${SAME_ORIGIN_API_BASE}${normalizedPath}`, {
+      ...options,
+      headers,
+    });
+  }
 
   const contentType = response.headers.get('content-type') || '';
   const payload = contentType.includes('application/json')

@@ -19,6 +19,15 @@ const isLocalOrigin = (origin) => {
 	}
 };
 
+const isVercelOrigin = (origin) => {
+	try {
+		const url = new URL(origin);
+		return url.hostname === "vercel.app" || url.hostname.endsWith(".vercel.app");
+	} catch {
+		return false;
+	}
+};
+
 app.use(
 	cors({
 		origin(origin, callback) {
@@ -27,7 +36,12 @@ app.use(
 				return callback(null, true);
 			}
 
-			if (allowedOrigins.length === 0 || allowedOrigins.includes(origin) || isLocalOrigin(origin)) {
+			if (
+				allowedOrigins.length === 0 ||
+				allowedOrigins.includes(origin) ||
+				isLocalOrigin(origin) ||
+				isVercelOrigin(origin)
+			) {
 				return callback(null, true);
 			}
 
