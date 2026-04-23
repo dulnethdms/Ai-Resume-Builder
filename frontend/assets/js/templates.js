@@ -2,12 +2,7 @@
 const TEMPLATE_RENDERERS = {
   modern: (r) => `
     <header class="border-b pb-2 mb-3" style="border-color: var(--resume-accent-soft);">
-      <h1 class="text-lg font-semibold" style="color: var(--resume-accent);">${r.personal.fullName || ''}</h1>
-      <p class="text-[11px] text-slate-600">
-        ${[r.personal.email, r.personal.phone, r.personal.address, r.personal.linkedin, r.personal.github]
-          .filter(Boolean)
-          .join(' • ')}
-      </p>
+      ${renderIdentityHeader(r, 'text-lg')}
     </header>
     ${r.summary ? `
       <section class="mb-3">
@@ -25,10 +20,7 @@ const TEMPLATE_RENDERERS = {
   `,
   minimal: (r) => `
     <header class="mb-2">
-      <h1 class="text-base font-semibold" style="color: var(--resume-accent);">${r.personal.fullName || ''}</h1>
-      <p class="text-[10px] text-slate-600">
-        ${[r.personal.email, r.personal.phone].filter(Boolean).join(' | ')}
-      </p>
+      ${renderIdentityHeader(r, 'text-base', [r.personal.email, r.personal.phone], ' | ')}
     </header>
     ${renderSummaryInline(r)}
     ${renderExperience(r)}
@@ -61,10 +53,7 @@ const TEMPLATE_RENDERERS = {
   `,
   corporate: (r) => `
     <header class="border-b pb-2 mb-2" style="border-color: var(--resume-accent-soft);">
-      <h1 class="text-base font-semibold" style="color: var(--resume-accent);">${r.personal.fullName || ''}</h1>
-      <p class="text-[10px] text-slate-600">
-        ${[r.personal.email, r.personal.phone, r.personal.address].filter(Boolean).join(' • ')}
-      </p>
+      ${renderIdentityHeader(r, 'text-base', [r.personal.email, r.personal.phone, r.personal.address])}
     </header>
     ${renderSummaryInline(r)}
     ${renderExperience(r)}
@@ -80,9 +69,7 @@ const TEMPLATE_RENDERERS = {
     <div class="grid grid-cols-12 border border-slate-300 overflow-hidden">
       <aside class="col-span-4 p-4 text-white" style="background: #1f2937;">
         <div class="h-1 w-10 mb-4" style="background: var(--resume-accent);"></div>
-        <div class="w-20 h-20 rounded-sm border border-white/30 bg-slate-600 flex items-center justify-center text-xl font-semibold">
-          ${getInitials(r.personal.fullName)}
-        </div>
+        ${renderSidebarAvatar(r)}
         <h1 class="text-xl mt-3 font-medium leading-tight">${r.personal.fullName || ''}</h1>
 
         ${renderSidebarContact(r)}
@@ -110,6 +97,50 @@ const TEMPLATE_RENDERERS = {
   classic: (r) => `...`,
   executive: (r) => `...`,
 };
+
+function getProfilePhotoSrc(r) {
+  const value = String(r?.personal?.profilePhoto || '').trim();
+  if (!value) return '';
+
+  if (value.startsWith('data:image/')) {
+    return value;
+  }
+
+  return '';
+}
+
+function renderIdentityHeader(r, titleClass = 'text-lg', contactItems, separator = ' • ') {
+  const photoSrc = getProfilePhotoSrc(r);
+  const contacts = (contactItems || [r.personal.email, r.personal.phone, r.personal.address, r.personal.linkedin, r.personal.github])
+    .filter(Boolean)
+    .join(separator);
+
+  return `
+    <div class="flex items-center gap-3">
+      ${photoSrc
+        ? `<img src="${photoSrc}" alt="Profile photo" class="w-12 h-12 rounded-full object-cover border border-slate-200" />`
+        : `<div class="w-12 h-12 rounded-full border border-slate-200 bg-slate-100 text-slate-600 flex items-center justify-center text-sm font-semibold">${getInitials(r.personal.fullName)}</div>`}
+      <div>
+        <h1 class="${titleClass} font-semibold" style="color: var(--resume-accent);">${r.personal.fullName || ''}</h1>
+        <p class="text-[11px] text-slate-600">${contacts}</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderSidebarAvatar(r) {
+  const photoSrc = getProfilePhotoSrc(r);
+
+  if (photoSrc) {
+    return `<img src="${photoSrc}" alt="Profile photo" class="w-20 h-20 rounded-sm border border-white/30 object-cover" />`;
+  }
+
+  return `
+    <div class="w-20 h-20 rounded-sm border border-white/30 bg-slate-600 flex items-center justify-center text-xl font-semibold">
+      ${getInitials(r.personal.fullName)}
+    </div>
+  `;
+}
 
 function getInitials(name) {
   const normalized = String(name || '').trim();

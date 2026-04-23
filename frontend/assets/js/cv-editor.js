@@ -8,7 +8,9 @@ window.resumeState = {
       soft: '#eef2ff',
     },
   },
-  personal: {},
+  personal: {
+    profilePhoto: '',
+  },
   summary: '',
   education: [],
   experience: [],
@@ -33,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const templateSelect = document.getElementById('templateSelect');
   const paletteSelect = document.getElementById('paletteSelect');
   const aiSummaryBtn = document.getElementById('aiSummaryBtn');
+  const photoInput = document.getElementById('photoInput');
+  const autoRemoveBgToggle = document.getElementById('autoRemoveBgToggle');
 
   if (!form || !templateSelect) return;
 
@@ -434,6 +438,62 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePreview();
 
         alert('AI service is currently unreachable, so a smart local summary was generated instead.');
+      }
+    });
+  }
+
+  if (photoInput) {
+    photoInput.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      // Show a local preview immediately, even if API processing fails.
+      const localReader = new FileReader();
+      localReader.onload = () => {
+        if (typeof localReader.result === 'string' && localReader.result.startsWith('data:image/')) {
+          window.resumeState.personal.profilePhoto = localReader.result;
+          updatePreview();
+        }
+      };
+      localReader.readAsDataURL(file);
+
+      const shouldAutoRemoveBackground = autoRemoveBgToggle?.checked ?? true;
+      if (!shouldAutoRemoveBackground) {
+        return;
+      }
+
+      if (typeof apiRequest !== 'function') {
+        alert('API helper is not loaded yet.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      photoInput.disabled = true;
+
+      try {
+        const response = await apiRequest('/ai/remove-background', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response?.imageBase64 || !response?.mimeType) {
+          throw new Error('Invalid image response');
+        }
+
+        window.resumeState.personal.profilePhoto = `data:${response.mimeType};base64,${response.imageBase64}`;
+        updatePreview();
+
+        if (!response.backgroundRemoved) {
+          alert('Profile photo uploaded. Set REMOVE_BG_API_KEY on the backend to enable automatic background removal.');
+        }
+      } catch (error) {
+        console.error('Profile photo processing failed:', error);
+        const reason = error?.message ? ` (${error.message})` : '';
+        alert(`Background removal is currently unavailable${reason}. The original photo is still shown in preview.`);
+      } finally {
+        photoInput.disabled = false;
       }
     });
   }

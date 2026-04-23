@@ -86,6 +86,7 @@ Health endpoint: http://localhost:5000/api/health
 - Start command: npm start
 - Runtime: Node.js
 - Set env vars: MONGODB_URI, JWT_SECRET, PORT, CORS_ORIGIN
+- Optional for AI profile photo background removal: REMOVE_BG_API_KEY
 
 For Vercel serverless, adapt Express handler to serverless entrypoint and set CORS_ORIGIN to your deployed frontend URL.
 
